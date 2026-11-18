@@ -121,15 +121,29 @@ class _GameImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (url.isEmpty) return const _ImagePlaceholder();
-    return Image.network(
-      url,
-      fit: BoxFit.cover,
-      errorBuilder: (_, __, ___) => const _ImagePlaceholder(),
-      loadingBuilder: (context, child, progress) {
-        if (progress == null) return child;
-        return const _ImagePlaceholder(showLoading: true);
-      },
+return Image.network(
+  url,
+  fit: BoxFit.cover,
+
+  // Fix cross-origin images on Flutter Web
+  webHtmlElementStrategy:
+      WebHtmlElementStrategy.fallback,
+
+  errorBuilder: (context, error, stackTrace) {
+    debugPrint('Image loading error: $error');
+    debugPrint('Image URL: $url');
+
+    return const _ImagePlaceholder();
+  },
+
+  loadingBuilder: (context, child, progress) {
+    if (progress == null) return child;
+
+    return const _ImagePlaceholder(
+      showLoading: true,
     );
+  },
+);
   }
 }
 

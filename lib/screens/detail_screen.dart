@@ -46,13 +46,24 @@ class DetailScreen extends StatelessWidget {
                       child: const Icon(Icons.sports_esports, size: 70),
                     )
                   : Image.network(
-                      imageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Container(
-                        color: theme.colorScheme.surfaceContainerHighest,
-                        child: const Icon(Icons.sports_esports, size: 70),
-                      ),
-                    ),
+  imageUrl,
+  fit: BoxFit.cover,
+
+  webHtmlElementStrategy:
+      WebHtmlElementStrategy.fallback,
+
+  errorBuilder: (context, error, stackTrace) {
+    debugPrint('Detail image error: $error');
+
+    return Container(
+      color: theme.colorScheme.surfaceContainerHighest,
+      child: const Icon(
+        Icons.sports_esports,
+        size: 70,
+      ),
+    );
+  },
+),
             ),
           ),
           Padding(
